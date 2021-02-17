@@ -9,7 +9,10 @@ import 'package:send_data_1/components/rounded_button.dart';
 import 'package:send_data_1/components/slider_form.dart';
 import 'package:send_data_1/constants/constants.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
+import 'package:send_data_1/provider/date_provider.dart';
 import 'package:send_data_1/provider/materias_provider.dart';
+import 'package:send_data_1/provider/plataform_provider.dart';
+import 'package:send_data_1/provider/timer_provider.dart';
 
 class FormDataScreen extends StatefulWidget {
   static final String routeName = 'formdata';
@@ -25,7 +28,13 @@ class _FormDataScreenState extends State<FormDataScreen> {
   bool _date = false;
   bool _timestart = false;
   bool _timeend = false;
+  //[===========================================]
+  bool _datebutton = false;
+  String _datebuttonstring;
   final materiasProvider = new MateriasProvider();
+  final plataformProvider = new PlataformProvider();
+  final dateProvider = new DateProvider();
+  final timerProvider = new TimerProvider();
   final prefs = new PreferenciasUsuario();
   List<String> materias = ['Seleccione una Materia'];
   //----------------------------------------
@@ -91,8 +100,23 @@ class _FormDataScreenState extends State<FormDataScreen> {
               space(),
               _roundedButtonTimeStar(),
               space(),
-              _dropdownMenuList(
-                  ['NINGUNO', 'ZOOM', 'MEETING'], 'Seleccione Plataforma'),
+              FutureBuilder(
+                future: plataformProvider.plat(),
+                builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+                  if (snapshot.hasData) {
+                    return _dropdownMenuList(
+                        snapshot.data, 'Seleccione Plataforma');
+                  } else {
+                    return Container(
+                      width: size.width * 0.9,
+                      height: size.height * 0.1,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              ),
               space(),
               _sliderForm(),
               space(),
@@ -144,11 +168,15 @@ class _FormDataScreenState extends State<FormDataScreen> {
 
   Widget _roundedButtonDate() {
     return RoundedButton(
-      text: 'Fecha',
+      text: _datebutton ? _datebuttonstring : 'Fecha',
       textcolor: _date ? colorDark : colorLight,
       onpress: () {
-        setState(() {
-          _date = !_date;
+        dateProvider.date().then((value) {
+          _datebuttonstring = value;
+          setState(() {
+            _datebutton = !_datebutton;
+            _date = !_date;
+          });
         });
       },
       sizebutton: 0.9,
@@ -161,6 +189,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: 'Hora Inicial',
       textcolor: _timestart ? colorDark : colorLight,
       onpress: () {
+        timerProvider.start();
         setState(() {
           _timestart = !_timestart;
         });
@@ -185,6 +214,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: 'Hora Final',
       textcolor: _timeend ? colorDark : colorLight,
       onpress: () {
+        timerProvider.end();
         setState(() {
           _timeend = !_timeend;
         });
