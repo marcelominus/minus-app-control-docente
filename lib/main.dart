@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:send_data_1/preference/preferencias_usuario.dart';
+import 'package:send_data_1/screen/form_data_screen.dart';
+import 'package:send_data_1/screen/information_screen.dart';
+import 'package:send_data_1/screen/login_screen.dart';
+import 'package:send_data_1/screen/welcome_screen.dart';
+
+void main() async {
+  runApp(MyApp());
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Inicio',
+        initialRoute: WelcomeScreen.routeName,
+        routes: {
+          WelcomeScreen.routeName: (BuildContext context) => WelcomeScreen(),
+          LoginScreen.routeName: (BuildContext context) => LoginScreen(),
+          InformationScreen.routeName: (BuildContext context) =>
+              InformationScreen(),
+          FormDataScreen.routeName: (BuildContext context) => FormDataScreen(),
+        },
+      ),
+    );
+  }
+}
