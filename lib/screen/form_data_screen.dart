@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:send_data_1/components/camera_form.dart';
 import 'package:send_data_1/components/card_title.dart';
 import 'package:send_data_1/components/checkbox_form.dart';
 import 'package:send_data_1/components/drawer_menu.dart';
@@ -25,12 +26,8 @@ class _FormDataScreenState extends State<FormDataScreen> {
   //======================================
   //Variables Globales
   //======================================
-  bool _date = false;
-  bool _timestart = false;
-  bool _timeend = false;
-  //[===========================================]
-  bool _datebutton = false;
-  String _datebuttonstring;
+
+  //----------------------------------------
   final materiasProvider = new MateriasProvider();
   final plataformProvider = new PlataformProvider();
   final dateProvider = new DateProvider();
@@ -43,10 +40,6 @@ class _FormDataScreenState extends State<FormDataScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // materiasProvider.mat().then((value) {
-    //   print('***************************************');
-    //   print(value);
-    // });
   }
 
   @override
@@ -59,6 +52,19 @@ class _FormDataScreenState extends State<FormDataScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Formulario'),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0, top: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  prefs.login = false;
+                  prefs.nombre = 'null';
+                  prefs.carnet = 'null';
+                  Navigator.pushNamed(context, 'welcome');
+                },
+                child: Text('Cerrar Sesión'),
+              )),
+        ],
       ),
       drawer: DrawerMenu(),
       body: SingleChildScrollView(
@@ -129,12 +135,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
                 hinttext: 'Ingrese alguna observacion.',
               ),
               space(),
-              Container(
-                  width: size.width * 0.8,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: AssetImage('lib/assets/img/imagenoavailable.png'),
-                  )),
+              CameraForm(),
               space(),
               _roundedPhoto(),
               space(),
@@ -168,34 +169,39 @@ class _FormDataScreenState extends State<FormDataScreen> {
 
   Widget _roundedButtonDate() {
     return RoundedButton(
-      text: _datebutton ? _datebuttonstring : 'Fecha',
-      textcolor: _date ? colorDark : colorLight,
+      text: prefs.date,
+      textcolor: prefs.datebool ? colorDark : colorLight,
       onpress: () {
-        dateProvider.date().then((value) {
-          _datebuttonstring = value;
-          setState(() {
-            _datebutton = !_datebutton;
-            _date = !_date;
+        if (prefs.datebool == false) {
+          dateProvider.date().then((value) {
+            setState(() {
+              prefs.date = value;
+              prefs.datebool = true;
+            });
           });
-        });
+        }
       },
       sizebutton: 0.9,
-      color: _date ? colorFour : colorThree,
+      color: prefs.datebool ? colorFour : colorThree,
     );
   }
 
   Widget _roundedButtonTimeStar() {
     return RoundedButton(
-      text: 'Hora Inicial',
-      textcolor: _timestart ? colorDark : colorLight,
+      text: prefs.timerstart,
+      textcolor: prefs.timerstartbool ? colorDark : colorLight,
       onpress: () {
-        timerProvider.start();
-        setState(() {
-          _timestart = !_timestart;
-        });
+        if (prefs.timerstartbool == false) {
+          timerProvider.start().then((value) {
+            setState(() {
+              prefs.timerstart = value;
+              prefs.timerstartbool = true;
+            });
+          });
+        }
       },
       sizebutton: 0.9,
-      color: _timestart ? colorFour : colorThree,
+      color: prefs.timerstartbool ? colorFour : colorThree,
     );
   }
 
@@ -211,16 +217,20 @@ class _FormDataScreenState extends State<FormDataScreen> {
 
   Widget _roundedButtonTimeEnd() {
     return RoundedButton(
-      text: 'Hora Final',
-      textcolor: _timeend ? colorDark : colorLight,
+      text: prefs.timerend,
+      textcolor: prefs.timerendbool ? colorDark : colorLight,
       onpress: () {
-        timerProvider.end();
-        setState(() {
-          _timeend = !_timeend;
-        });
+        if (prefs.timerendbool == false) {
+          timerProvider.end().then((value) {
+            setState(() {
+              prefs.timerend = value;
+              prefs.timerendbool = true;
+            });
+          });
+        }
       },
       sizebutton: 0.9,
-      color: _timeend ? colorFour : colorThree,
+      color: prefs.timerendbool ? colorFour : colorThree,
     );
   }
 
@@ -249,7 +259,17 @@ class _FormDataScreenState extends State<FormDataScreen> {
         RoundedButton(
           text: 'Enviar Formulario',
           textcolor: Colors.white,
-          onpress: () {},
+          onpress: () {
+            setState(() {
+              //**** => Reseteo de rpeferencias
+              prefs.date = 'Obtener Fecha';
+              prefs.datebool = false;
+              prefs.timerstart = 'Obtener Hora de Inicio';
+              prefs.timerstartbool = false;
+              prefs.timerend = 'Obtener Hora de Final';
+              prefs.timerendbool = false;
+            });
+          },
           sizebutton: 0.9,
           color: colorFive,
         )

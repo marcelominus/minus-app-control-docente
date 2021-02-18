@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:send_data_1/components/rounded_button.dart';
 import 'package:send_data_1/constants/constants.dart';
+import 'package:send_data_1/preference/preferencias_usuario.dart';
 
 class WelcomeScreen extends StatelessWidget {
   // const WelcomeScreen({Key key}) : super(key: key);
   //Colocamos las variables antes del BUILD
   static final String routeName = 'welcome';
   //
+  final prefs = new PreferenciasUsuario();
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,9 @@ class WelcomeScreen extends StatelessWidget {
     //
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
-          'Bienvenidos',
+          'Bienvenido',
         ),
         backgroundColor: colorSix,
         elevation: 20.0,
@@ -40,7 +43,11 @@ class WelcomeScreen extends StatelessWidget {
             RoundedButton(
               text: 'Ingresar',
               onpress: () {
-                Navigator.pushNamed(context, 'login');
+                if (prefs.login) {
+                  Navigator.pushNamed(context, 'formdata');
+                } else {
+                  Navigator.pushNamed(context, 'login');
+                }
               },
               textcolor: Colors.white,
             ),

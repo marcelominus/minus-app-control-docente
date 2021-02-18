@@ -80,4 +80,55 @@ class PreferenciasUsuario {
   set carnet(String value) {
     _prefs.setString('carnet', value);
   }
+
+  //----------------------------------------
+  get date {
+    return _prefs.getString('date') ?? 'Obtener Fecha';
+  }
+
+  set date(String value) {
+    _prefs.setString('date', value);
+  }
+
+  get datebool {
+    return _prefs.getBool('datebool') ?? false;
+  }
+
+  set datebool(bool value) {
+    _prefs.setBool('datebool', value);
+  }
+
+  //----------------------------------------
+  get timerstart {
+    return _prefs.getString('timerstart') ?? 'Obtener Hora de Inicio';
+  }
+
+  set timerstart(String value) {
+    _prefs.setString('timerstart', value);
+  }
+
+  get timerstartbool {
+    return _prefs.getBool('timerstartbool') ?? false;
+  }
+
+  set timerstartbool(bool value) {
+    _prefs.setBool('timerstartbool', value);
+  }
+
+  //----------------------------------------
+  get timerend {
+    return _prefs.getString('timerend') ?? 'Obtener Hora de Final';
+  }
+
+  set timerend(String value) {
+    _prefs.setString('timerend', value);
+  }
+
+  get timerendbool {
+    return _prefs.getBool('timerendbool') ?? false;
+  }
+
+  set timerendbool(bool value) {
+    _prefs.setBool('timerendbool', value);
+  }
 }
