@@ -56,7 +56,7 @@ class _CameraFormState extends State<CameraForm> {
               fit: BoxFit.cover,
               image: _image == null
                   ? AssetImage('lib/assets/img/imagenoavailable.png')
-                  : Image.file(_image),
+                  : FileImage(_image),
             )),
         SizedBox(
           height: 15,
