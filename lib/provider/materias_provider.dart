@@ -19,6 +19,7 @@ class MateriasProvider {
       lista.map((e) {
         materias.add(e['sigla']);
       }).toList();
+      materias.insert(0, "Seleccione una Materia");
       return materias;
     }
   }

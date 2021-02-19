@@ -63,6 +63,9 @@ class _DropdownMenuListState extends State<DropdownMenuList> {
               ),
             ),
             DropdownButtonFormField<String>(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
               items: widget.items.map((e) {
                 return DropdownMenuItem<String>(
                   child: Text(

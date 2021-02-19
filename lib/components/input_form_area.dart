@@ -5,7 +5,9 @@ import 'package:send_data_1/components/container_input_text.dart';
 class InputFormArea extends StatelessWidget {
   final String name;
   final String hinttext;
-  const InputFormArea({Key key, this.name, this.hinttext});
+  final ValueChanged<String> onchanged;
+
+  const InputFormArea({Key key, this.name, this.hinttext, this.onchanged});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class InputFormArea extends StatelessWidget {
                 border: InputBorder.none),
             obscureText: false,
             maxLines: 3,
+            onChanged: onchanged,
           )
         ],
       ),

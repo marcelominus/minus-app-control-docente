@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:send_data_1/components/container_input_text.dart';
 
-class InputForm extends StatelessWidget {
+class InputFormAreaNew extends StatefulWidget {
   final String name;
+  final String hinttext;
   final ValueChanged<String> onchanged;
+  InputFormAreaNew({Key key, this.name, this.hinttext, this.onchanged})
+      : super(key: key);
 
-  const InputForm({
-    Key key,
-    this.name,
-    this.onchanged,
-  }) : super(key: key);
+  @override
+  _InputFormAreaNewState createState() => _InputFormAreaNewState();
+}
 
+class _InputFormAreaNewState extends State<InputFormAreaNew> {
+  final FocusNode _passwordEmail = FocusNode();
   @override
   Widget build(BuildContext context) {
     //----------------------------------------
@@ -24,7 +27,7 @@ class InputForm extends StatelessWidget {
             width: size.width * 0.9,
             padding: EdgeInsets.only(top: 5),
             child: Text(
-              name,
+              widget.name,
               textAlign: TextAlign.start,
               style: GoogleFonts.exo2(
                 fontSize: 14,
@@ -34,17 +37,14 @@ class InputForm extends StatelessWidget {
             ),
           ),
           TextField(
-            style: TextStyle(
-              fontSize: 14,
-            ),
+            focusNode: _passwordEmail,
             decoration: InputDecoration(
-              hintText: "Ingrese la cantidad de estudiantes",
-              labelStyle: TextStyle(color: Colors.black, fontSize: 15),
-              border: InputBorder.none,
-              icon: Icon(Icons.person),
-            ),
-            onChanged: onchanged,
-            keyboardType: TextInputType.number,
+                hintText: widget.hinttext,
+                labelStyle: TextStyle(color: Colors.black),
+                border: InputBorder.none),
+            obscureText: false,
+            maxLines: 3,
+            onChanged: widget.onchanged,
           )
         ],
       ),
