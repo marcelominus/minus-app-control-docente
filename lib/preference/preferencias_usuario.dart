@@ -131,4 +131,57 @@ class PreferenciasUsuario {
   set timerendbool(bool value) {
     _prefs.setBool('timerendbool', value);
   }
+
+  //----------------------------------------
+  get photo {
+    return _prefs.getString('photo') ?? 'empty';
+  }
+
+  set photo(String value) {
+    _prefs.setString('photo', value);
+  }
+
+  get photobool {
+    return _prefs.getBool('photobool') ?? false;
+  }
+
+  set photobool(bool value) {
+    _prefs.setBool('photobool', value);
+  }
+
+  //----------------------------------------
+  get asignature {
+    return _prefs.getString('asignature') ?? 'Seleccione una Opcion';
+  }
+
+  set asignature(String value) {
+    _prefs.setString('asignature', value);
+  }
+
+  //----------------------------------------
+  get plataform {
+    return _prefs.getString('plataform') ?? 'Seleccione una Opcion';
+  }
+
+  set plataform(String value) {
+    _prefs.setString('plataform', value);
+  }
+
+  //----------------------------------------
+  get theme {
+    return _prefs.getString('theme') ?? '';
+  }
+
+  set theme(String value) {
+    _prefs.setString('theme', value);
+  }
+
+  //----------------------------------------
+  get amount {
+    return _prefs.getString('amount') ?? '';
+  }
+
+  set amount(String value) {
+    _prefs.setString('amount', value);
+  }
 }

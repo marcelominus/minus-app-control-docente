@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:send_data_1/components/container_input_text.dart';
+import 'package:send_data_1/preference/preferencias_usuario.dart';
 
 class InputFormArea extends StatelessWidget {
   final String name;
   final String hinttext;
   final ValueChanged<String> onchanged;
-
-  const InputFormArea({Key key, this.name, this.hinttext, this.onchanged});
+  final String initial;
+  final TextEditingController controller;
+  const InputFormArea(
+      {Key key,
+      this.name,
+      this.hinttext,
+      this.onchanged,
+      this.initial,
+      this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final prefs = new PreferenciasUsuario();
     //----------------------------------------
     Size size = MediaQuery.of(context).size;
     //----------------------------------------
@@ -30,7 +39,7 @@ class InputFormArea extends StatelessWidget {
               ),
             ),
           ),
-          TextField(
+          TextFormField(
             decoration: InputDecoration(
                 hintText: hinttext,
                 labelStyle: TextStyle(color: Colors.black),
@@ -38,6 +47,9 @@ class InputFormArea extends StatelessWidget {
             obscureText: false,
             maxLines: 3,
             onChanged: onchanged,
+            // controller: TextEditingController(text: prefs.theme),
+            initialValue: initial,
+            controller: controller,
           )
         ],
       ),

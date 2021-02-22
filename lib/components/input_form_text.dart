@@ -5,11 +5,14 @@ import 'package:send_data_1/components/container_input_text.dart';
 class InputForm extends StatelessWidget {
   final String name;
   final ValueChanged<String> onchanged;
-
+  final String initial;
+  final TextEditingController controller;
   const InputForm({
     Key key,
     this.name,
     this.onchanged,
+    this.initial,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -33,9 +36,9 @@ class InputForm extends StatelessWidget {
               ),
             ),
           ),
-          TextField(
+          TextFormField(
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 15,
             ),
             decoration: InputDecoration(
               hintText: "Ingrese la cantidad de estudiantes",
@@ -45,6 +48,8 @@ class InputForm extends StatelessWidget {
             ),
             onChanged: onchanged,
             keyboardType: TextInputType.number,
+            initialValue: initial,
+            controller: controller,
           )
         ],
       ),

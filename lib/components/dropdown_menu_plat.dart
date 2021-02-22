@@ -3,24 +3,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:send_data_1/constants/constants.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 
-class DropdownMenuList extends StatefulWidget {
+class DropdownMenuPlat extends StatefulWidget {
+  // DropdownMenuPlat({Key key}) : super(key: key);
   //===============================
   final List<String> items;
   final ValueChanged<String> onChangedFirst;
   final String name;
-  final GlobalKey<FormFieldState> list;
-  DropdownMenuList({
+  final GlobalKey<FormFieldState> plat;
+  DropdownMenuPlat({
     @required this.name,
     @required this.items,
     @required this.onChangedFirst,
-    this.list,
+    this.plat,
   });
   //===============================
   @override
-  _DropdownMenuListState createState() => _DropdownMenuListState();
+  _DropdownMenuPlatState createState() => _DropdownMenuPlatState();
 }
 
-class _DropdownMenuListState extends State<DropdownMenuList> {
+class _DropdownMenuPlatState extends State<DropdownMenuPlat> {
   String selectedKey;
   final prefs = new PreferenciasUsuario();
 
@@ -67,7 +68,7 @@ class _DropdownMenuListState extends State<DropdownMenuList> {
               ),
             ),
             DropdownButtonFormField<String>(
-              key: widget.list,
+              key: widget.plat,
               onTap: () {
                 FocusScope.of(context).requestFocus(new FocusNode());
               },
@@ -82,11 +83,11 @@ class _DropdownMenuListState extends State<DropdownMenuList> {
               }).toList(),
               onChanged: (val) {
                 setState(() {
-                  prefs.asignature = val;
+                  prefs.plataform;
                 });
                 widget.onChangedFirst(val);
               },
-              value: prefs.asignature,
+              value: prefs.plataform,
               decoration: InputDecoration(enabledBorder: InputBorder.none),
             ),
           ],

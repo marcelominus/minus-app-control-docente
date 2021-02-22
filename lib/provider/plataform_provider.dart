@@ -16,7 +16,7 @@ class PlataformProvider {
       lista.map((e) {
         plataform.add(e['plataforma']);
       }).toList();
-      plataform.insert(0, "Seleccione una Plataforma");
+      plataform.insert(0, "Seleccione una Opcion");
 
       return plataform;
     }

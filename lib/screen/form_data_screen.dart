@@ -4,16 +4,18 @@ import 'package:send_data_1/components/card_title.dart';
 import 'package:send_data_1/components/checkbox_form.dart';
 import 'package:send_data_1/components/drawer_menu.dart';
 import 'package:send_data_1/components/dropdown_menu_list.dart';
+import 'package:send_data_1/components/dropdown_menu_plat.dart';
 import 'package:send_data_1/components/input_form_area.dart';
-import 'package:send_data_1/components/input_form_area_new.dart';
 import 'package:send_data_1/components/input_form_text.dart';
 import 'package:send_data_1/components/rounded_button.dart';
 import 'package:send_data_1/components/slider_form.dart';
 import 'package:send_data_1/constants/constants.dart';
+import 'package:send_data_1/constants/functions.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 import 'package:send_data_1/provider/date_provider.dart';
 import 'package:send_data_1/provider/materias_provider.dart';
 import 'package:send_data_1/provider/plataform_provider.dart';
+import 'package:send_data_1/provider/send_provider.dart';
 import 'package:send_data_1/provider/timer_provider.dart';
 
 class FormDataScreen extends StatefulWidget {
@@ -33,15 +35,29 @@ class _FormDataScreenState extends State<FormDataScreen> {
   final plataformProvider = new PlataformProvider();
   final dateProvider = new DateProvider();
   final timerProvider = new TimerProvider();
+  final sendProvider = new SendProvider();
   final prefs = new PreferenciasUsuario();
   List<String> materias = ['Seleccione una Materia'];
   //----------------------------------------
-  String asignature;
-  String theme;
-  String quantity;
-  String plataform;
-  double advance = 0.0;
+  String asignature = '';
+  String theme = '';
+  String quantity = '';
+  String plataform = '';
+  double advance = 20.0;
   bool back = false;
+  String observation = '';
+  TextEditingController _controllertheme;
+  TextEditingController _controlleramount;
+  final GlobalKey<FormFieldState> key1 = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> key2 = GlobalKey<FormFieldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _controllertheme = new TextEditingController(text: prefs.theme);
+    _controlleramount = new TextEditingController(text: prefs.amount);
+  }
+
   //----------------------------------------
   @override
   Widget build(BuildContext context) {
@@ -71,14 +87,20 @@ class _FormDataScreenState extends State<FormDataScreen> {
                 hinttext: 'Ingrese el titulo del tema avanzado',
                 onchanged: (e) {
                   theme = e;
+                  prefs.theme = e;
                 },
+                // initial: prefs.theme,
+                controller: _controllertheme,
               ),
               space(),
               InputForm(
                 name: 'Cantidad de estudiantes.',
                 onchanged: (e) {
                   quantity = e;
+                  prefs.amount = e;
                 },
+                // initial: prefs.amount
+                controller: _controlleramount,
               ),
               space(),
               _roundedButtonDate(),
@@ -96,6 +118,10 @@ class _FormDataScreenState extends State<FormDataScreen> {
               InputFormArea(
                 name: 'Observaciones',
                 hinttext: 'Ingrese alguna observacion.',
+                onchanged: (e) {
+                  observation = e;
+                },
+                initial: '',
               ),
               space(),
               CameraForm(),
@@ -143,17 +169,18 @@ class _FormDataScreenState extends State<FormDataScreen> {
       onChangedFirst: (val) {
         asignature = val;
       },
+      list: key1,
     );
   }
 
   Widget _dropdownMenuListPlataform(List<String> list, String name) {
-    return DropdownMenuList(
+    return DropdownMenuPlat(
       name: name,
       items: list,
       onChangedFirst: (val) {
-        print(val);
         plataform = val;
       },
+      plat: key2,
     );
   }
 
@@ -250,23 +277,43 @@ class _FormDataScreenState extends State<FormDataScreen> {
           textcolor: Colors.white,
           onpress: () {
             setState(() {
-              //**** => Reseteo de rpeferencias
-              prefs.date = 'Obtener Fecha';
-              prefs.datebool = false;
-              prefs.timerstart = 'Obtener Hora de Inicio';
-              prefs.timerstartbool = false;
-              prefs.timerend = 'Obtener Hora de Final';
-              prefs.timerendbool = false;
-              //**** => Verificacion de variables
-              print(asignature);
-              print(theme);
-              print(quantity);
-              print(prefs.date);
-              print(prefs.timerstart);
-              print(prefs.timerend);
-              print(plataform);
-              print(advance.toInt());
-              print(back);
+              bool dates = _verificationDate(
+                prefs.asignature,
+                prefs.theme,
+                prefs.amount,
+                prefs.date,
+                prefs.timerstart,
+                prefs.timerend,
+                plataform,
+                prefs.photo,
+              );
+              if (dates == true) {
+                Functions().toastAlert('Datos vacios Revise el Formulario');
+              } else {
+                sendProvider
+                    .send(
+                        prefs.asignature,
+                        prefs.theme,
+                        prefs.amount,
+                        prefs.date,
+                        prefs.timerstart,
+                        plataform,
+                        advance,
+                        back,
+                        prefs.timerend,
+                        prefs.photo,
+                        observation,
+                        prefs.carnet)
+                    .then((value) {
+                  if (value == 'correcto') {
+                    _resetVar();
+                    Functions().toastSuccess('Correcto Datos Enviados');
+                  } else {
+                    Functions()
+                        .toastError('Ocurrio un error intente mas tarde');
+                  }
+                });
+              }
             });
           },
           sizebutton: 0.9,
@@ -325,6 +372,58 @@ class _FormDataScreenState extends State<FormDataScreen> {
         }
       },
     );
+  }
+
+  bool _verificationDate(
+    String asignature,
+    String theme,
+    String quantity,
+    String date,
+    String timerstart,
+    String timerend,
+    String plataform,
+    String photo,
+  ) {
+    if (prefs.asignature == '' ||
+        prefs.asignature == 'Seleccione una Opcion' ||
+        plataform == '' ||
+        plataform == 'Seleccione una Opcion' ||
+        prefs.theme == '' ||
+        prefs.amount == '' ||
+        date == 'Obtener Fecha' ||
+        timerstart == 'Obtener Hora de Inicio' ||
+        timerend == 'Obtener Hora de Final' ||
+        photo == 'empty') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void _resetVar() {
+    setState(() {
+      asignature = 'Seleccione una Opcion';
+      plataform = 'Seleccione una Opcion';
+      theme = '';
+      quantity = '';
+      //**** => Reseteo de rpeferencias
+      prefs.date = 'Obtener Fecha';
+      prefs.datebool = false;
+      prefs.timerstart = 'Obtener Hora de Inicio';
+      prefs.timerstartbool = false;
+      prefs.timerend = 'Obtener Hora de Final';
+      prefs.timerendbool = false;
+      prefs.photo = 'empty';
+      prefs.photobool = false;
+      prefs.theme = '';
+      prefs.amount = '';
+      _controllertheme.clear();
+      _controlleramount.clear();
+      // key1.currentState.reset();
+      key2.currentState.reset();
+    });
+
+    //**** => Verificacion de variables
   }
   //----------------------------------------
 }
