@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
+import 'package:send_data_1/screen/detail_screen.dart';
 import 'package:send_data_1/screen/form_data_screen.dart';
 import 'package:send_data_1/screen/information_screen.dart';
 import 'package:send_data_1/screen/login_screen_one.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           InformationScreen.routeName: (BuildContext context) =>
               InformationScreen(),
           FormDataScreen.routeName: (BuildContext context) => FormDataScreen(),
+          DetailScreen.routeName: (BuildContext context) => DetailScreen(),
         },
       ),
     );

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:send_data_1/components/drawer_menu.dart';
@@ -13,7 +11,6 @@ class InformationScreen extends StatelessWidget {
   final prefs = new PreferenciasUsuario();
   final matProvider = new MateriasProviderNew();
   final List<Request> materiasDoc = new List();
-  final opciones = ['1', '2', ' 3'];
   @override
   Widget build(BuildContext context) {
     Future<bool> _onWillPop() async {
@@ -72,7 +69,7 @@ class InformationScreen extends StatelessWidget {
         if (snapshot.hasData) {
           return Container(
             child: Column(
-              children: _crearLista(snapshot.data),
+              children: _crearLista(snapshot.data, context),
             ),
           );
         } else {
@@ -88,7 +85,7 @@ class InformationScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _crearLista(opciones) {
+  List<Widget> _crearLista(opciones, BuildContext context) {
     return opciones.map<Widget>((e) {
       return Column(
         children: <Widget>[
@@ -106,7 +103,9 @@ class InformationScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, 'detail');
+            },
           ),
         ],
       );
