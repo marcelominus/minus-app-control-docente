@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 import 'package:send_data_1/screen/form_data_screen.dart';
 import 'package:send_data_1/screen/information_screen.dart';
-import 'package:send_data_1/screen/login_screen.dart';
 import 'package:send_data_1/screen/login_screen_one.dart';
 import 'package:send_data_1/screen/welcome_screen.dart';
 

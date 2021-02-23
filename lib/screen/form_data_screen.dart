@@ -19,7 +19,8 @@ import 'package:send_data_1/provider/send_provider.dart';
 import 'package:send_data_1/provider/timer_provider.dart';
 
 class FormDataScreen extends StatefulWidget {
-  static final String routeName = 'formdata';
+  //----------------------------------------
+  static final String routeName = 'formdata'; //**** => Ruta de acceso de SCREEN
 
   @override
   _FormDataScreenState createState() => _FormDataScreenState();
@@ -29,31 +30,34 @@ class _FormDataScreenState extends State<FormDataScreen> {
   //======================================
   //Variables Globales
   //======================================
-
-  //----------------------------------------
-  final materiasProvider = new MateriasProvider();
+  final materiasProvider = new MateriasProvider(); //**** => PROVIDERS
   final plataformProvider = new PlataformProvider();
   final dateProvider = new DateProvider();
   final timerProvider = new TimerProvider();
   final sendProvider = new SendProvider();
-  final prefs = new PreferenciasUsuario();
+  final prefs = new PreferenciasUsuario(); //**** => Preferencias
   List<String> materias = ['Seleccione una Materia'];
   //----------------------------------------
-  String asignature = '';
+  String asignature = ''; //**** => Variables
   String theme = '';
   String quantity = '';
   String plataform = '';
   double advance = 20.0;
   bool back = false;
   String observation = '';
-  TextEditingController _controllertheme;
+  TextEditingController _controllertheme; //**** => Controllers
   TextEditingController _controlleramount;
-  final GlobalKey<FormFieldState> key1 = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> key1 =
+      GlobalKey<FormFieldState>(); //**** => Variables para resetear DROPDOWN
   final GlobalKey<FormFieldState> key2 = GlobalKey<FormFieldState>();
 
+  //----------------------------------------
   @override
   void initState() {
     super.initState();
+    //***************************************
+    //Inicializamos los controller para poder insertar los valores de los PREFS
+    //Y procedemos a instanciarlo para mas adelante poder eliminar los valores inscritos
     _controllertheme = new TextEditingController(text: prefs.theme);
     _controlleramount = new TextEditingController(text: prefs.amount);
   }
@@ -89,7 +93,6 @@ class _FormDataScreenState extends State<FormDataScreen> {
                   theme = e;
                   prefs.theme = e;
                 },
-                // initial: prefs.theme,
                 controller: _controllertheme,
               ),
               space(),
@@ -99,7 +102,6 @@ class _FormDataScreenState extends State<FormDataScreen> {
                   quantity = e;
                   prefs.amount = e;
                 },
-                // initial: prefs.amount
                 controller: _controlleramount,
               ),
               space(),
@@ -147,8 +149,28 @@ class _FormDataScreenState extends State<FormDataScreen> {
         padding: EdgeInsets.only(right: 20.0, top: 20.0),
         child: GestureDetector(
           onTap: () {
-            prefs.login = false;
-            Navigator.pushNamed(context, 'welcome');
+            showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Obtener Informacion?'),
+                content: new Text(
+                    'Presione YES para realizar peticion de información'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () {
+                      prefs.login = false;
+                      Navigator.of(context).pop(false);
+                      Navigator.pushNamed(context, 'welcome');
+                    },
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+            );
           },
           child: Text('Cerrar Sesión'),
         ));
@@ -158,6 +180,26 @@ class _FormDataScreenState extends State<FormDataScreen> {
   Widget _cardTitle(texto) {
     return CardTitle(
       text: texto,
+    );
+  }
+
+  //----------------------------------------
+  Widget _getAsignature(BuildContext context, Size size) {
+    return FutureBuilder(
+      future: materiasProvider.mat(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return _dropdownMenuListAsig(snapshot.data, 'Seleccione la Materia');
+        } else {
+          return Container(
+            width: size.width * 0.9,
+            height: size.height * 0.1,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -173,6 +215,28 @@ class _FormDataScreenState extends State<FormDataScreen> {
     );
   }
 
+  //----------------------------------------
+  Widget _getPlataform(BuildContext context, Size size) {
+    return FutureBuilder(
+      future: plataformProvider.plat(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return _dropdownMenuListPlataform(
+              snapshot.data, 'Seleccione Plataforma');
+        } else {
+          return Container(
+            width: size.width * 0.9,
+            height: size.height * 0.1,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  //----------------------------------------
   Widget _dropdownMenuListPlataform(List<String> list, String name) {
     return DropdownMenuPlat(
       name: name,
@@ -190,14 +254,34 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.date,
       textcolor: prefs.datebool ? colorDark : colorLight,
       onpress: () {
-        if (prefs.datebool == false) {
-          dateProvider.date().then((value) {
-            setState(() {
-              prefs.date = value;
-              prefs.datebool = true;
-            });
-          });
-        }
+        showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Obtener Informacion?'),
+            content:
+                new Text('Presione YES para realizar peticion de información'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  if (prefs.datebool == false) {
+                    dateProvider.date().then((value) {
+                      setState(() {
+                        prefs.date = value;
+                        prefs.datebool = true;
+                      });
+                    });
+                  }
+                  Navigator.of(context).pop(false);
+                },
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        );
       },
       sizebutton: 0.9,
       color: prefs.datebool ? colorFour : colorThree,
@@ -210,14 +294,34 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.timerstart,
       textcolor: prefs.timerstartbool ? colorDark : colorLight,
       onpress: () {
-        if (prefs.timerstartbool == false) {
-          timerProvider.start().then((value) {
-            setState(() {
-              prefs.timerstart = value;
-              prefs.timerstartbool = true;
-            });
-          });
-        }
+        showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Obtener Informacion?'),
+            content:
+                new Text('Presione YES para realizar peticion de información'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  if (prefs.timerstartbool == false) {
+                    timerProvider.start().then((value) {
+                      setState(() {
+                        prefs.timerstart = value;
+                        prefs.timerstartbool = true;
+                      });
+                    });
+                  }
+                  Navigator.of(context).pop(false);
+                },
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        );
       },
       sizebutton: 0.9,
       color: prefs.timerstartbool ? colorFour : colorThree,
@@ -244,17 +348,47 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.timerend,
       textcolor: prefs.timerendbool ? colorDark : colorLight,
       onpress: () {
-        if (prefs.timerendbool == false) {
-          timerProvider.end().then((value) {
-            setState(() {
-              prefs.timerend = value;
-              prefs.timerendbool = true;
-            });
-          });
-        }
+        showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Obtener Informacion?'),
+            content:
+                new Text('Presione YES para realizar peticion de información'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  if (prefs.timerendbool == false) {
+                    timerProvider.end().then((value) {
+                      setState(() {
+                        prefs.timerend = value;
+                        prefs.timerendbool = true;
+                      });
+                    });
+                  }
+                  Navigator.of(context).pop(false);
+                },
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        );
       },
       sizebutton: 0.9,
       color: prefs.timerendbool ? colorFour : colorThree,
+    );
+  }
+
+  //----------------------------------------
+  Widget _checkForm() {
+    return CheckboxForm(
+      onChangedFirst: (e) {
+        back = e;
+      },
+      name: 'Respaldo',
     );
   }
 
@@ -324,56 +458,6 @@ class _FormDataScreenState extends State<FormDataScreen> {
   }
 
   //----------------------------------------
-  Widget _checkForm() {
-    return CheckboxForm(
-      onChangedFirst: (e) {
-        back = e;
-      },
-      name: 'Respaldo',
-    );
-  }
-
-  //----------------------------------------
-  Widget _getAsignature(BuildContext context, Size size) {
-    return FutureBuilder(
-      future: materiasProvider.mat(),
-      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-        if (snapshot.hasData) {
-          return _dropdownMenuListAsig(snapshot.data, 'Seleccione la Materia');
-        } else {
-          return Container(
-            width: size.width * 0.9,
-            height: size.height * 0.1,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  //----------------------------------------
-  Widget _getPlataform(BuildContext context, Size size) {
-    return FutureBuilder(
-      future: plataformProvider.plat(),
-      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-        if (snapshot.hasData) {
-          return _dropdownMenuListPlataform(
-              snapshot.data, 'Seleccione Plataforma');
-        } else {
-          return Container(
-            width: size.width * 0.9,
-            height: size.height * 0.1,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      },
-    );
-  }
-
   bool _verificationDate(
     String asignature,
     String theme,
@@ -400,6 +484,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
     }
   }
 
+  //----------------------------------------
   void _resetVar() {
     setState(() {
       asignature = 'Seleccione una Opcion';
@@ -407,7 +492,8 @@ class _FormDataScreenState extends State<FormDataScreen> {
       theme = '';
       quantity = '';
       //**** => Reseteo de rpeferencias
-      prefs.date = 'Obtener Fecha';
+      prefs.date =
+          'Obtener Fecha'; //**** => Reinicamos las variables de PREFERENCES
       prefs.datebool = false;
       prefs.timerstart = 'Obtener Hora de Inicio';
       prefs.timerstartbool = false;
@@ -417,13 +503,34 @@ class _FormDataScreenState extends State<FormDataScreen> {
       prefs.photobool = false;
       prefs.theme = '';
       prefs.amount = '';
-      _controllertheme.clear();
+      _controllertheme
+          .clear(); //**** => Reiniciamos los valores de los dos campos
       _controlleramount.clear();
-      // key1.currentState.reset();
-      key2.currentState.reset();
+      key2.currentState.reset(); //**** => Reinicamos los valores de Dropdown
     });
-
-    //**** => Verificacion de variables
   }
+
   //----------------------------------------
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

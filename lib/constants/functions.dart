@@ -7,9 +7,9 @@ class Functions {
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[900],
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: 14.0);
   }
 
   void toastSuccess(String message) {
@@ -19,7 +19,7 @@ class Functions {
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.green[800],
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: 14.0);
   }
 
   void toastAlert(String message) {
@@ -29,6 +29,6 @@ class Functions {
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.orange[800],
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: 14.0);
   }
 }
