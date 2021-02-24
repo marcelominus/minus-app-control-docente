@@ -26,7 +26,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             title: Text('Formulario'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, 'formdata');
+              Navigator.pushReplacementNamed(context, 'formselect');
             },
           ),
           ListTile(

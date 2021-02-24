@@ -43,7 +43,9 @@ class _FormDataScreenState extends State<FormDataScreen> {
   String quantity = '';
   String plataform = '';
   double advance = 20.0;
+  int advanceInt = 0;
   bool back = false;
+  String backNew = 'false';
   String observation = '';
   TextEditingController _controllertheme; //**** => Controllers
   TextEditingController _controlleramount;
@@ -254,34 +256,15 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.date,
       textcolor: prefs.datebool ? colorDark : colorLight,
       onpress: () {
-        showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Obtener Informacion?'),
-            content:
-                new Text('Presione YES para realizar peticion de información'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () {
-                  if (prefs.datebool == false) {
-                    dateProvider.date().then((value) {
-                      setState(() {
-                        prefs.date = value;
-                        prefs.datebool = true;
-                      });
-                    });
-                  }
-                  Navigator.of(context).pop(false);
-                },
-                child: new Text('Yes'),
-              ),
-            ],
-          ),
-        );
+        print(prefs.datebool);
+        if (prefs.datebool == false) {
+          dateProvider.date().then((value) {
+            setState(() {
+              prefs.date = value;
+              prefs.datebool = true;
+            });
+          });
+        }
       },
       sizebutton: 0.9,
       color: prefs.datebool ? colorFour : colorThree,
@@ -294,34 +277,16 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.timerstart,
       textcolor: prefs.timerstartbool ? colorDark : colorLight,
       onpress: () {
-        showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Obtener Informacion?'),
-            content:
-                new Text('Presione YES para realizar peticion de información'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () {
-                  if (prefs.timerstartbool == false) {
-                    timerProvider.start().then((value) {
-                      setState(() {
-                        prefs.timerstart = value;
-                        prefs.timerstartbool = true;
-                      });
-                    });
-                  }
-                  Navigator.of(context).pop(false);
-                },
-                child: new Text('Yes'),
-              ),
-            ],
-          ),
-        );
+        if (prefs.timerstartbool == false) {
+          timerProvider.start().then((value) {
+            setState(() {
+              prefs.timerstart = value;
+              prefs.timerstartbool = true;
+              print('===============================');
+              print(prefs.timerend);
+            });
+          });
+        }
       },
       sizebutton: 0.9,
       color: prefs.timerstartbool ? colorFour : colorThree,
@@ -332,9 +297,9 @@ class _FormDataScreenState extends State<FormDataScreen> {
   Widget _sliderForm() {
     return SliderForm(
         onChangedFirst: (e) {
-          print(e);
           setState(() {
             advance = e;
+            advanceInt = advance.round();
           });
         },
         name: 'Avance ${advance.toInt()}',
@@ -348,34 +313,16 @@ class _FormDataScreenState extends State<FormDataScreen> {
       text: prefs.timerend,
       textcolor: prefs.timerendbool ? colorDark : colorLight,
       onpress: () {
-        showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Obtener Informacion?'),
-            content:
-                new Text('Presione YES para realizar peticion de información'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () {
-                  if (prefs.timerendbool == false) {
-                    timerProvider.end().then((value) {
-                      setState(() {
-                        prefs.timerend = value;
-                        prefs.timerendbool = true;
-                      });
-                    });
-                  }
-                  Navigator.of(context).pop(false);
-                },
-                child: new Text('Yes'),
-              ),
-            ],
-          ),
-        );
+        print(prefs.timerendbool);
+        if (prefs.timerendbool == false) {
+          timerProvider.end().then((value) {
+            setState(() {
+              prefs.timerend = value;
+              prefs.timerendbool = true;
+              print(prefs.timerend);
+            });
+          });
+        }
       },
       sizebutton: 0.9,
       color: prefs.timerendbool ? colorFour : colorThree,
@@ -387,6 +334,12 @@ class _FormDataScreenState extends State<FormDataScreen> {
     return CheckboxForm(
       onChangedFirst: (e) {
         back = e;
+        print(back);
+        if (back = true) {
+          backNew = 'true';
+        } else {
+          backNew = 'false';
+        }
       },
       name: 'Respaldo',
     );
@@ -421,6 +374,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
                 plataform,
                 prefs.photo,
               );
+
               if (dates == true) {
                 Functions().toastAlert('Datos vacios Revise el Formulario');
               } else {
@@ -432,8 +386,8 @@ class _FormDataScreenState extends State<FormDataScreen> {
                         prefs.date,
                         prefs.timerstart,
                         plataform,
-                        advance,
-                        back,
+                        advanceInt,
+                        backNew,
                         prefs.timerend,
                         prefs.photo,
                         observation,
@@ -500,6 +454,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
       prefs.timerend = 'Obtener Hora de Final';
       prefs.timerendbool = false;
       prefs.photo = 'empty';
+      prefs.plataform = '';
       prefs.photobool = false;
       prefs.theme = '';
       prefs.amount = '';
@@ -508,29 +463,5 @@ class _FormDataScreenState extends State<FormDataScreen> {
       _controlleramount.clear();
       key2.currentState.reset(); //**** => Reinicamos los valores de Dropdown
     });
-  }
-
-  //----------------------------------------
-  void _showDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

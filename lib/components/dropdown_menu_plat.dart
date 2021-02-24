@@ -87,7 +87,7 @@ class _DropdownMenuPlatState extends State<DropdownMenuPlat> {
                 });
                 widget.onChangedFirst(val);
               },
-              value: prefs.plataform,
+              value: selectedKey,
               decoration: InputDecoration(enabledBorder: InputBorder.none),
             ),
           ],

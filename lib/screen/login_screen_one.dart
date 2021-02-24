@@ -145,7 +145,7 @@ class _LoginScreenOneState extends State<LoginScreenOne> {
         prefs.login = true;
         prefs.nombre = e['response'].nombre;
         prefs.carnet = e['response'].carnet;
-        Navigator.pushNamed(context, 'formdata');
+        Navigator.pushNamed(context, 'formselect');
       }
     });
   }

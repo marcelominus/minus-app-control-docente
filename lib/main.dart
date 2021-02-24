@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 import 'package:send_data_1/screen/detail_screen.dart';
 import 'package:send_data_1/screen/form_data_screen.dart';
+import 'package:send_data_1/screen/form_select_screen.dart';
 import 'package:send_data_1/screen/information_screen.dart';
 import 'package:send_data_1/screen/login_screen_one.dart';
 import 'package:send_data_1/screen/welcome_screen.dart';
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Inicio',
-        initialRoute: WelcomeScreen.routeName,
+        // initialRoute: WelcomeScreen.routeName,
+        initialRoute: FormSelectScreen.routeName,
+
         routes: {
           WelcomeScreen.routeName: (BuildContext context) => WelcomeScreen(),
           LoginScreenOne.routeName: (BuildContext context) => LoginScreenOne(),
@@ -29,6 +32,8 @@ class MyApp extends StatelessWidget {
               InformationScreen(),
           FormDataScreen.routeName: (BuildContext context) => FormDataScreen(),
           DetailScreen.routeName: (BuildContext context) => DetailScreen(),
+          FormSelectScreen.routeName: (BuildContext context) =>
+              FormSelectScreen(),
         },
       ),
     );

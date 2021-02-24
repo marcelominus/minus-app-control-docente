@@ -1,7 +1,13 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:send_data_1/components/container_input_text.dart';
 import 'package:send_data_1/components/dropdown_generic.dart';
 import 'package:send_data_1/components/rounded_button.dart';
+import 'package:send_data_1/constants/constants.dart';
+import 'package:send_data_1/constants/functions.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
+import 'package:send_data_1/provider/detail_provider.dart';
 import 'package:send_data_1/provider/mat_and_sigle_provider.dart';
 import 'package:send_data_1/model/mat_new_model.dart';
 
@@ -15,9 +21,13 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   String dropdownValue = 'One';
+  bool busqueda = false;
+  String valorDate = '';
   final prefs = new PreferenciasUsuario();
   final matProvider = new MateriasProviderNew();
+  final detailProvider = new DetailProviderNew();
   final List<Request> materiasDoc = new List();
+
   @override
   Widget build(BuildContext context) {
     //======================================
@@ -25,78 +35,101 @@ class _DetailScreenState extends State<DetailScreen> {
     //======================================
     Size size = MediaQuery.of(context).size; //**** => Tamanio de pantallaS
     //=========================================
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles'),
+        title: Text(prefs.siglasearch),
       ),
-      body: Container(
-        width: size.width,
-        color: Colors.red[100],
-        child: Column(
-          children: <Widget>[
-            // DropdownGeneric(),
-            SizedBox(
-              height: 10,
-            ),
-            DropdownGeneric(
-              items: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-              onChangedFirst: (e) {},
-              name: 'Seleccione un Año',
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            DropdownGeneric(
-              items: [
-                'Enero',
-                'Febrero',
-                'Marzo',
-                'Abril',
-                'Mayo',
-                'Junio',
-                'Julio',
-                'Agosto',
-                'Septiembre',
-                'Octubre',
-                'Noviembre',
-                'Diciembre'
-              ],
-              onChangedFirst: (e) {},
-              name: 'Seleccione un Mes',
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            RoundedButton(
-              onpress: () {},
-              text: 'Buscar',
-              textcolor: Colors.white,
-              sizebutton: 0.9,
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            _getPlataform(context)
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          width: size.width,
+          color: colorLight,
+          child: Column(
+            children: <Widget>[
+              // DropdownGeneric(),
+              SizedBox(
+                height: 10,
+              ),
+              ContainerInputText(
+                child: DateTimePicker(
+                  initialValue: '',
+                  dateMask: 'MM/dd/yyyy',
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                  dateLabelText: 'Ingrese la Fecha a Buscar',
+                  onChanged: (val) {
+                    valorDate = val;
+                    setState(() {
+                      busqueda = false;
+                    });
+                  },
+                  validator: (val) {
+                    print(val);
+                    return null;
+                  },
+                ),
+              ),
+
+              SizedBox(
+                height: 15,
+              ),
+              RoundedButton(
+                onpress: () {
+                  print(valorDate);
+                  if (valorDate == '') {
+                    print('Se se tiene datos');
+                    Functions().toastAlert('Selecciones una Fecha de Busqueda');
+                  } else {
+                    List valor = valorDate.split('-');
+                    String valor1 = int.parse(valor[0]).toString();
+                    String valor2 = int.parse(valor[1]).toString();
+                    String valor3 = int.parse(valor[2]).toString();
+                    String valEnd = valor2 + '/' + valor3 + '/' + valor1;
+
+                    prefs.datesearch = valEnd;
+                    print(prefs.datesearch);
+                    detailProvider.fech();
+                    setState(() {
+                      busqueda = true;
+                    });
+                    // if (prefs.datesearch != '') {
+                  }
+                  // }
+                },
+                text: 'Buscar',
+                textcolor: Colors.white,
+                sizebutton: 0.9,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: busqueda
+                    ? _getPlataform(context, size)
+                    : Text('No existe datos'),
+              )
+              // _getPlataform(context)
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _getPlataform(BuildContext context) {
+  Widget _getPlataform(BuildContext context, size) {
     return FutureBuilder(
-      future: matProvider.mat(),
+      future: detailProvider.fech(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           return Container(
             child: Column(
-              children: _crearLista(snapshot.data, context),
+              children: _crearLista(snapshot.data, context, size),
             ),
           );
         } else {
           return Container(
-            width: 20,
-            height: 20,
+            width: size.width,
+            height: size.height * 0.4,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -106,28 +139,132 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  List<Widget> _crearLista(opciones, BuildContext context) {
+  List<Widget> _crearLista(opciones, BuildContext context, size) {
     return opciones.map<Widget>((e) {
       return Column(
         children: <Widget>[
-          ListTile(
-            title: Text(e.sigla),
-            subtitle: Text(e.materia),
-            leading: FadeInImage(
-              placeholder: AssetImage('lib/assets/img/jar-loading.gif'),
-              image: NetworkImage(
-                  'https://previews.123rf.com/images/vectorikart/vectorikart1312/vectorikart131200010/24633545-ilustraci%C3%B3n-conceptual-de-un-equipo-de-profesores-con-iconos-de-educaci%C3%B3n-en-hex%C3%A1gonos.jpg'),
-              fadeInDuration: Duration(
-                milliseconds: 500,
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            margin: EdgeInsets.all(5),
+            elevation: 10,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: size.width * 0.35,
+                    child: FadeInImage(
+                      // En esta propiedad colocamos la imagen a descargar
+                      image: NetworkImage('${e.foto}'),
+                      placeholder: AssetImage('lib/assets/img/jar-loading.gif'),
+                      fit: BoxFit.cover,
+                      height: 260,
+                    ),
+                  ),
+                  Container(
+                    width: size.width * 0.62,
+                    height: 260,
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          e.materia,
+                          style: GoogleFonts.exo2(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Tema avanzado : ${e.titulo}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Fecha : ${e.fecha}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Hora inicial : ${e.horaini}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Hora final : ${e.horafin}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Cantidad : ${e.cantidad}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Avance : ${e.avance}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Plataforma : ${e.plataforma}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Observaciones : ${e.observacion}',
+                          style: GoogleFonts.exo2(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-              height: 300.0,
-              fit: BoxFit.cover,
             ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.pushNamed(context, 'detail');
-            },
-          ),
+          )
         ],
       );
     }).toList();

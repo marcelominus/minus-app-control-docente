@@ -17,8 +17,8 @@ class InformationScreen extends StatelessWidget {
       return (await showDialog(
             context: context,
             builder: (context) => new AlertDialog(
-              title: new Text('Obtener información?'),
-              content: new Text('Obtener informacion de registro'),
+              title: new Text('Salir'),
+              content: new Text('Esta seguro de salir de la aplicación'),
               actions: <Widget>[
                 new FlatButton(
                   onPressed: () => Navigator.of(context).pop(false),
@@ -44,17 +44,7 @@ class InformationScreen extends StatelessWidget {
       child: new Scaffold(
         appBar: AppBar(
           title: Text('Information'),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 20.0, top: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    prefs.login = false;
-                    Navigator.pushNamed(context, 'welcome');
-                  },
-                  child: Text('Cerrar Sesión'),
-                )),
-          ],
+          actions: <Widget>[_closeSession(context)],
         ),
         drawer: DrawerMenu(),
         body: _getPlataform(context),
@@ -63,6 +53,11 @@ class InformationScreen extends StatelessWidget {
   }
 
   Widget _getPlataform(BuildContext context) {
+    //======================================
+    //Variables Locales
+    //======================================
+    Size size = MediaQuery.of(context).size; //**** => Tamanio de pantallaS
+    //=========================================
     return FutureBuilder(
       future: matProvider.mat(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
@@ -74,8 +69,8 @@ class InformationScreen extends StatelessWidget {
           );
         } else {
           return Container(
-            width: 20,
-            height: 20,
+            width: size.width,
+            height: size.height * 0.5,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -104,11 +99,45 @@ class InformationScreen extends StatelessWidget {
             ),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
+              prefs.siglasearch = e.sigla;
               Navigator.pushNamed(context, 'detail');
             },
           ),
         ],
       );
     }).toList();
+  }
+
+  //----------------------------------------
+  Widget _closeSession(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(right: 20.0, top: 20.0),
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Obtener Informacion?'),
+                content: new Text(
+                    'Presione YES para realizar peticion de información'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () {
+                      prefs.login = false;
+                      Navigator.of(context).pop(false);
+                      Navigator.pushNamed(context, 'welcome');
+                    },
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+            );
+          },
+          child: Text('Cerrar Sesión'),
+        ));
   }
 }

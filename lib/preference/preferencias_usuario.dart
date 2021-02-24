@@ -184,4 +184,22 @@ class PreferenciasUsuario {
   set amount(String value) {
     _prefs.setString('amount', value);
   }
+
+  //----------------------------------------
+  get datesearch {
+    return _prefs.getString('datesearch') ?? '';
+  }
+
+  set datesearch(String value) {
+    _prefs.setString('datesearch', value);
+  }
+
+  //----------------------------------------
+  get siglasearch {
+    return _prefs.getString('siglasearch') ?? '';
+  }
+
+  set siglasearch(String value) {
+    _prefs.setString('siglasearch', value);
+  }
 }
