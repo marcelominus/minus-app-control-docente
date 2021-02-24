@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:send_data_1/constants/constants.dart';
 
 class CardTitle extends StatelessWidget {
   final String text;
@@ -9,12 +10,18 @@ class CardTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Card(
+      elevation: 20,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      color: colorFive,
       child: Row(
         children: <Widget>[
           Container(
             width: size.width * 0.35,
-            child: Image(
-              image: AssetImage('lib/assets/img/artificial.jpg'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                image: AssetImage('lib/assets/img/artificial.jpg'),
+              ),
             ),
           ),
           Container(
@@ -25,10 +32,10 @@ class CardTitle extends StatelessWidget {
                 Text(
                   'Bienvenido',
                   style: GoogleFonts.exo2(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    fontStyle: FontStyle.normal,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      color: colorLight),
                 ),
                 SizedBox(
                   height: 10.0,
@@ -38,7 +45,8 @@ class CardTitle extends StatelessWidget {
                   style: GoogleFonts.exo2(
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
-                      fontStyle: FontStyle.italic),
+                      fontStyle: FontStyle.italic,
+                      color: colorLight),
                 ),
               ],
             ),

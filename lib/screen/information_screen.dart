@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:send_data_1/components/drawer_menu.dart';
+import 'package:send_data_1/constants/constants.dart';
 import 'package:send_data_1/model/mat_new_model.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 import 'package:send_data_1/provider/mat_and_sigle_provider.dart';
@@ -45,6 +46,7 @@ class InformationScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Information'),
           actions: <Widget>[_closeSession(context)],
+          backgroundColor: colorSix,
         ),
         drawer: DrawerMenu(),
         body: _getPlataform(context),
@@ -86,7 +88,7 @@ class InformationScreen extends StatelessWidget {
         children: <Widget>[
           ListTile(
             title: Text(e.sigla),
-            subtitle: Text(e.materia),
+            subtitle: Text(e.materia, overflow: TextOverflow.ellipsis),
             leading: FadeInImage(
               placeholder: AssetImage('lib/assets/img/jar-loading.gif'),
               image: NetworkImage(
@@ -129,7 +131,8 @@ class InformationScreen extends StatelessWidget {
                     onPressed: () {
                       prefs.login = false;
                       Navigator.of(context).pop(false);
-                      Navigator.pushNamed(context, 'welcome');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'welcome', (e) => false);
                     },
                     child: new Text('Yes'),
                   ),

@@ -18,10 +18,10 @@ class ContainerInputText extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorLight,
         borderRadius: BorderRadius.circular(15.0),
-        border: Border.all(color: colorFour, width: 1),
+        border: Border.all(color: colorDark, width: 1),
         boxShadow: [
           BoxShadow(
-            color: colorFour.withOpacity(0.5),
+            color: colorDark.withOpacity(0.5),
             spreadRadius: 4,
             blurRadius: 7,
             offset: Offset(0, 1), // changes position of shadow

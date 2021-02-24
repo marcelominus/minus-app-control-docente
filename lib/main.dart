@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Inicio',
         // initialRoute: WelcomeScreen.routeName,
-        initialRoute: FormSelectScreen.routeName,
+        initialRoute: WelcomeScreen.routeName,
 
         routes: {
           WelcomeScreen.routeName: (BuildContext context) => WelcomeScreen(),

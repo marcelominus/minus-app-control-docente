@@ -38,6 +38,14 @@ class _CheckboxFormState extends State<CheckboxForm> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: colorLight,
+        boxShadow: [
+          BoxShadow(
+            color: colorDark.withOpacity(0.5),
+            spreadRadius: 4,
+            blurRadius: 7,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
       ),
       child: Column(
         children: <Widget>[

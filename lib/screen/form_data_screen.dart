@@ -76,12 +76,13 @@ class _FormDataScreenState extends State<FormDataScreen> {
       appBar: AppBar(
         title: Text('Formulario'),
         actions: <Widget>[_closeSession(context)],
+        backgroundColor: colorSix,
       ),
       drawer: DrawerMenu(),
       body: SingleChildScrollView(
         child: Container(
           width: size.width,
-          color: colorOne,
+          color: colorLight,
           child: Column(
             children: <Widget>[
               _cardTitle(prefs.nombre),
@@ -154,9 +155,8 @@ class _FormDataScreenState extends State<FormDataScreen> {
             showDialog(
               context: context,
               builder: (context) => new AlertDialog(
-                title: new Text('Obtener Informacion?'),
-                content: new Text(
-                    'Presione YES para realizar peticion de información'),
+                title: new Text('Salir'),
+                content: new Text('Esta seguro de salir de la aplicacion?'),
                 actions: <Widget>[
                   new FlatButton(
                     onPressed: () => Navigator.of(context).pop(false),
@@ -166,7 +166,8 @@ class _FormDataScreenState extends State<FormDataScreen> {
                     onPressed: () {
                       prefs.login = false;
                       Navigator.of(context).pop(false);
-                      Navigator.pushNamed(context, 'welcome');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'welcome', (e) => false);
                     },
                     child: new Text('Yes'),
                   ),
@@ -354,7 +355,7 @@ class _FormDataScreenState extends State<FormDataScreen> {
           width: size.width,
           height: size.height * 0.1,
           decoration: BoxDecoration(
-            color: colorTwo,
+            color: colorSix,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20), topLeft: Radius.circular(20)),
           ),

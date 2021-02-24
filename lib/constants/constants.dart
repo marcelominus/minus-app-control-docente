@@ -18,3 +18,4 @@ const colorFive = Color(0xFF4C49A2);
 const colorLightFive = Color(0xFFBAB8FF);
 const colorSix = Color(0xFFA31A48);
 const colorLightSix = Color(0xFFFF9EBE);
+const colorLightTen = Color(0xFFA7A09E);

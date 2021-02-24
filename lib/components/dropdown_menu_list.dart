@@ -43,7 +43,7 @@ class _DropdownMenuListState extends State<DropdownMenuList> {
           borderRadius: BorderRadius.circular(15.0),
           boxShadow: [
             BoxShadow(
-              color: colorFour.withOpacity(0.5),
+              color: colorDark.withOpacity(0.5),
               spreadRadius: 4,
               blurRadius: 7,
               offset: Offset(0, 1),

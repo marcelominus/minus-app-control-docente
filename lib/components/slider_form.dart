@@ -46,7 +46,7 @@ class _SliderFormState extends State<SliderForm> {
         color: colorLight,
         boxShadow: [
           BoxShadow(
-            color: colorFour.withOpacity(0.5),
+            color: colorDark.withOpacity(0.5),
             spreadRadius: 4,
             blurRadius: 7,
             offset: Offset(0, 1), // changes position of shadow

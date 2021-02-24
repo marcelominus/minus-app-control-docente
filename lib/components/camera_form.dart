@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:send_data_1/components/rounded_button.dart';
+import 'package:send_data_1/constants/constants.dart';
 import 'package:send_data_1/preference/preferencias_usuario.dart';
 
 class CameraForm extends StatefulWidget {
@@ -54,11 +55,15 @@ class _CameraFormState extends State<CameraForm> {
       children: [
         Container(
             width: size.width * 0.8,
-            child: Image(
-              fit: BoxFit.cover,
-              image: prefs.photobool
-                  ? FileImage(_image)
-                  : AssetImage('lib/assets/img/imagenoavailable.png'),
+            color: colorLightTen,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                fit: BoxFit.cover,
+                image: prefs.photobool
+                    ? FileImage(_image)
+                    : AssetImage('lib/assets/img/imagenoavailable.png'),
+              ),
             )),
         SizedBox(
           height: 15,

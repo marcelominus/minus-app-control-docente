@@ -39,6 +39,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(prefs.siglasearch),
+        backgroundColor: colorSix,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -170,94 +171,85 @@ class _DetailScreenState extends State<DetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          e.materia,
-                          style: GoogleFonts.exo2(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
+                        Text(e.materia,
+                            style: GoogleFonts.exo2(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                            ),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Tema avanzado : ${e.titulo}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Tema avanzado : ${e.titulo}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Fecha : ${e.fecha}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Fecha : ${e.fecha}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Hora inicial : ${e.horaini}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Hora inicial : ${e.horaini}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Hora final : ${e.horafin}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Hora final : ${e.horafin}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Cantidad : ${e.cantidad}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Cantidad : ${e.cantidad}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Avance : ${e.avance}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Avance : ${e.avance}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Plataforma : ${e.plataforma}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Plataforma : ${e.plataforma}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          'Observaciones : ${e.observacion}',
-                          style: GoogleFonts.exo2(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic),
-                        ),
+                        Text('Observaciones : ${e.observacion}',
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic),
+                            overflow: TextOverflow.ellipsis),
                       ],
                     ),
                   )
